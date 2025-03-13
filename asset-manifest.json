@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/Ink-N-Threadworks/static/css/main.e6c13ad2.css",
+    "main.js": "/Ink-N-Threadworks/static/js/main.0159a380.js",
+    "static/js/453.d4b17b3a.chunk.js": "/Ink-N-Threadworks/static/js/453.d4b17b3a.chunk.js",
+    "index.html": "/Ink-N-Threadworks/index.html",
+    "main.e6c13ad2.css.map": "/Ink-N-Threadworks/static/css/main.e6c13ad2.css.map",
+    "main.0159a380.js.map": "/Ink-N-Threadworks/static/js/main.0159a380.js.map",
+    "453.d4b17b3a.chunk.js.map": "/Ink-N-Threadworks/static/js/453.d4b17b3a.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.e6c13ad2.css",
+    "static/js/main.0159a380.js"
+  ]
+}
