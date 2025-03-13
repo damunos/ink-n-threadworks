@@ -1,97 +1,141 @@
-import React, { useState } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import Button from "./components/ui/Button"; // Ensure Button.js exists inside /components/ui/
-import { Stage, Layer, Text, Line, Transformer } from "react-konva";
+import { auth, db, signInWithGoogle, signOutUser } from "./firebase"; // Firebase utilities
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import { collection, addDoc, getDocs, doc, updateDoc } from "firebase/firestore";
+import Button from "./components/ui/Button";
 import html2canvas from "html2canvas";
+import logo from "./assets/logo.png";
 
-function Home() {
-  const [text, setText] = useState("Your Design Here");
-  const [color, setColor] = useState("black");
-  const [fontSize, setFontSize] = useState(20);
-  const [fontStyle, setFontStyle] = useState("normal");
+
+// 🔹 Navbar Component
+function Navbar({ user }) {
+  return (
+    <nav className="bg-gray-700 p-4 text-white flex justify-between items-center">
+      <Link to="/">
+        <img src={logo} alt="Ink N Threadworks Logo" className="h-12" />
+      </Link>
+      <div>
+        {user ? (
+          <>
+            <span className="mr-4">{user.displayName || user.email}</span>
+            <Button onClick={signOutUser} className="bg-red-600 text-white px-4 py-2">Sign Out</Button>
+          </>
+        ) : (
+          <>
+            <Link to="/signup">
+              <Button className="bg-green-600 text-white px-4 py-2">Sign Up</Button>
+            </Link>
+            <Button onClick={signInWithGoogle} className="ml-2 bg-blue-600 text-white px-4 py-2">Sign In</Button>
+          </>
+        )}
+      </div>
+    </nav>
+  );
+}
+
+// 🔹 Home Page Component
+function Home({ user }) {
   const [items, setItems] = useState([]);
-  const [selectedIds, setSelectedIds] = useState([]);
   const [templates, setTemplates] = useState([]);
   const gridSize = 20;
 
-  // Handle item selection
-  const handleSelection = (id) => {
-    setSelectedIds((prev) =>
-      prev.includes(id) ? prev.filter((selectedId) => selectedId !== id) : [...prev, id]
-    );
+  // Save Template to Firestore
+  const saveTemplate = async () => {
+    if (!user) return alert("Please sign in to save your design!");
+    const canvas = document.querySelector("canvas");
+    const snapshot = await html2canvas(canvas);
+    const imageData = snapshot.toDataURL("image/png");
+
+    await addDoc(collection(db, "designs"), {
+      userId: user.uid,
+      design: [...items],
+      preview: imageData,
+      timestamp: new Date(),
+    });
+
+    alert("Design saved!");
   };
 
-  return (
-    <div className="min-h-screen bg-tan p-6 flex flex-col items-center text-black">
-      {/* Navbar */}
-      <nav className="bg-gray-800 p-4 w-full flex justify-between items-center text-white shadow-lg">
-        <h1 className="text-2xl font-bold">Ink N Threadworks</h1>
-        <div className="space-x-4">
-          <Button className="bg-gray-600 hover:bg-gray-700 px-4 py-2 rounded-lg">Products</Button>
-          <Button className="bg-gray-600 hover:bg-gray-700 px-4 py-2 rounded-lg">Design Tool</Button>
-          <Button className="bg-gray-600 hover:bg-gray-700 px-4 py-2 rounded-lg">Track Order</Button>
-        </div>
-      </nav>
+  // Load Templates from Firestore
+  useEffect(() => {
+    const loadTemplates = async () => {
+      if (!user) return;
+      const querySnapshot = await getDocs(collection(db, "designs"));
+      const userTemplates = querySnapshot.docs
+        .filter((doc) => doc.data().userId === user.uid)
+        .map((doc) => ({ id: doc.id, ...doc.data() }));
+      setTemplates(userTemplates);
+    };
+    if (user) loadTemplates();
+  }, [user]);
 
-      {/* Hero Section */}
-      <header className="text-center py-16 bg-gray-100 w-full rounded-lg shadow-md">
-        <h2 className="text-4xl font-bold">Create Custom Apparel with Ease</h2>
+  return (
+    <div className="bg-gray-100 min-h-screen">
+      <Navbar user={user} />
+      
+      <header className="text-center py-16 bg-white shadow-md">
+        <h2 className="text-4xl font-bold text-black">Create Custom Apparel with Ease</h2>
         <p className="text-gray-700 mt-2">Upload your design, customize, and place your order in minutes!</p>
         <motion.div whileHover={{ scale: 1.05 }} className="mt-6">
-          <Button className="bg-black text-white px-6 py-3 rounded-lg shadow-md">Start Designing</Button>
+          <Button className="bg-gray-700 text-white px-6 py-3 rounded-lg">Start Designing</Button>
         </motion.div>
       </header>
 
       {/* Design Tool */}
-      <section className="mt-10 bg-white p-6 shadow-md rounded-lg w-full max-w-4xl">
-        <h3 className="text-2xl font-semibold">Design Your Apparel</h3>
-        <Stage width={400} height={400} className="border border-gray-500 mt-4">
-          <Layer>
-            {/* Grid Overlay */}
-            {[...Array(20)].map((_, i) => (
-              <Line key={`v-${i}`} points={[i * gridSize, 0, i * gridSize, 400]} stroke="#ddd" strokeWidth={0.5} />
-            ))}
-            {[...Array(20)].map((_, i) => (
-              <Line key={`h-${i}`} points={[0, i * gridSize, 400, i * gridSize]} stroke="#ddd" strokeWidth={0.5} />
-            ))}
+      <section className="p-6">
+        <h3 className="text-2xl font-semibold text-black">Design Your Apparel</h3>
+        <div className="bg-white p-4 shadow-md rounded-lg mt-4">
+          <canvas className="border border-gray-500 w-full h-96" />
 
-            {items.map((item) =>
-              item.type === "text" ? (
-                <Text
-                  key={item.id}
-                  text={item.text}
-                  x={item.x}
-                  y={item.y}
-                  fill={item.color}
-                  fontSize={item.fontSize}
-                  fontStyle={item.fontStyle}
-                  draggable={!item.locked}
-                  onClick={() => handleSelection(item.id)}
-                />
-              ) : null
-            )}
-
-            {selectedIds.length > 0 && (
-              <Transformer nodes={items.filter((item) => selectedIds.includes(item.id)).map((item) => item.ref).filter(Boolean)} />
-            )}
-          </Layer>
-        </Stage>
+          <Button onClick={saveTemplate} className="mt-4 bg-gray-700 text-white px-4 py-2">Save Template</Button>
+        </div>
       </section>
-
-      {/* Footer */}
-      <footer className="bg-gray-800 text-white text-center p-4 mt-10 w-full">
-        <p>&copy; {new Date().getFullYear()} Ink N Threadworks - All Rights Reserved.</p>
-      </footer>
     </div>
   );
 }
 
-export default function App() {
+// 🔹 Sign Up Component
+function SignUp() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleSignUp = async () => {
+    try {
+      await createUserWithEmailAndPassword(auth, email, password);
+      alert("Account created! You can now sign in.");
+    } catch (error) {
+      alert("Error signing up: " + error.message);
+    }
+  };
+
   return (
-    <Router basename={process.env.NODE_ENV === "development" ? "/" : "/Ink-N-Threadworks"}>
+    <div className="p-6 max-w-md mx-auto mt-10 bg-white shadow-md rounded-md">
+      <h2 className="text-2xl font-semibold text-center">Create an Account</h2>
+      <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} className="w-full border p-2 mt-2 rounded" />
+      <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} className="w-full border p-2 mt-2 rounded" />
+      <Button onClick={handleSignUp} className="w-full mt-4 bg-green-600 text-white px-4 py-2">Sign Up</Button>
+    </div>
+  );
+}
+
+// 🔹 Main App Component
+export default function App() {
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((currentUser) => {
+      setUser(currentUser);
+    });
+    return () => unsubscribe();
+  }, []);
+
+  return (
+    <Router basename="/Ink-N-Threadworks">
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<Home user={user} />} />
+        <Route path="/signup" element={<SignUp />} />
       </Routes>
     </Router>
   );
