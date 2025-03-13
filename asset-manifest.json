@@ -1,15 +1,16 @@
 {
   "files": {
-    "main.css": "/Ink-N-Threadworks/static/css/main.e6c13ad2.css",
-    "main.js": "/Ink-N-Threadworks/static/js/main.0159a380.js",
-    "static/js/453.d4b17b3a.chunk.js": "/Ink-N-Threadworks/static/js/453.d4b17b3a.chunk.js",
+    "main.css": "/Ink-N-Threadworks/static/css/main.4df8b182.css",
+    "main.js": "/Ink-N-Threadworks/static/js/main.e9e069b6.js",
+    "static/js/453.d48022b7.chunk.js": "/Ink-N-Threadworks/static/js/453.d48022b7.chunk.js",
+    "static/media/logo.png": "/Ink-N-Threadworks/static/media/logo.8a6d15616b75e93c567d.png",
     "index.html": "/Ink-N-Threadworks/index.html",
-    "main.e6c13ad2.css.map": "/Ink-N-Threadworks/static/css/main.e6c13ad2.css.map",
-    "main.0159a380.js.map": "/Ink-N-Threadworks/static/js/main.0159a380.js.map",
-    "453.d4b17b3a.chunk.js.map": "/Ink-N-Threadworks/static/js/453.d4b17b3a.chunk.js.map"
+    "main.4df8b182.css.map": "/Ink-N-Threadworks/static/css/main.4df8b182.css.map",
+    "main.e9e069b6.js.map": "/Ink-N-Threadworks/static/js/main.e9e069b6.js.map",
+    "453.d48022b7.chunk.js.map": "/Ink-N-Threadworks/static/js/453.d48022b7.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.e6c13ad2.css",
-    "static/js/main.0159a380.js"
+    "static/css/main.4df8b182.css",
+    "static/js/main.e9e069b6.js"
   ]
 }
