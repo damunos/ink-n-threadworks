@@ -1,0 +1,42 @@
+.sign-up {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
+
+.sign-up h2 {
+  text-align: center;
+}
+
+.sign-up form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sign-up input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.sign-up button {
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: #333;
+  color: white;
+  cursor: pointer;
+}
+
+.sign-up button:hover {
+  background-color: #555;
+}
+
+.sign-up p {
+  color: red;
+  text-align: center;
+}

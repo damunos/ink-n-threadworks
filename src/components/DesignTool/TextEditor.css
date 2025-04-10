@@ -1,0 +1,26 @@
+.text-editor {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.text-editor textarea {
+  width: 100%;
+  height: 100px;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.text-editor-controls {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.text-editor-controls label {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}

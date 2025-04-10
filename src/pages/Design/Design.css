@@ -1,0 +1,81 @@
+.design-page {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+  text-align: center;
+}
+
+.design-tools {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 30%;
+}
+
+.preview-section {
+  width: 65%;
+}
+
+.preview-text {
+  text-align: right;
+  margin-bottom: 10px;
+}
+
+.preview {
+  width: 100%;
+  height: 400px;
+  border: 1px solid #ccc;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.preview-image {
+  max-width: 100%;
+  max-height: 100%;
+  position: absolute;
+}
+
+.preview-text {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  z-index: 10;
+}
+
+.stock-art-library {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.stock-art-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 10px;
+}
+
+.stock-art-image {
+  width: 100%;
+  cursor: pointer;
+}
+
+.image-uploader img {
+  margin-top: 10px;
+}
+
+.product-preview {
+  margin: 20px auto;
+  width: 500px;
+  height: 500px;
+  border: 1px solid #ccc;
+  position: relative;
+}
+
+input[type="file"] {
+  margin-top: 20px;
+}

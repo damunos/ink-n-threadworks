@@ -1,0 +1,46 @@
+.design-tool {
+  display: flex;
+  height: 100vh;
+}
+
+.tool-sidebar {
+  width: 300px;
+  background-color: #f8f8f8;
+  padding: 20px;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.tool-preview {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #ffffff;
+}
+
+.preview-area {
+  width: 500px;
+  height: 500px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid #ccc;
+  position: relative;
+}
+
+.preview-image {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.preview-text {
+  position: absolute;
+  color: #ffffff;
+  font-size: 24px;
+  text-align: center;
+}
+
+.product-selector {
+  margin-bottom: 20px;
+}

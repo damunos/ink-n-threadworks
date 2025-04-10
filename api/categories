@@ -1,0 +1,56 @@
+// Backend: /api/categories
+app.get("/api/categories", async (req, res) => {
+  try {
+    const filePath = path.join(__dirname, "SanMar_SDL_Fallback.csv");
+    const results = [];
+
+    fs.createReadStream(filePath)
+      .pipe(csv())
+      .on("data", (data) => {
+        if (data.PRODUCT_STATUS !== "Discontinued") {
+          const subCats = data.CATEGORY_NAME?.split(";").map(s => s.trim()) || [];
+          results.push(...subCats.map(sub => ({
+            mainCategory: getMainCategory(sub),
+            subCategory: sub,
+          })));
+        }
+      })
+      .on("end", () => {
+        // Build structured category list
+        const categoryMap = {};
+        results.forEach(({ mainCategory, subCategory }) => {
+          if (!categoryMap[mainCategory]) categoryMap[mainCategory] = new Set();
+          categoryMap[mainCategory].add(subCategory);
+        });
+
+        const categories = Object.entries(categoryMap).map(([main, subs]) => ({
+          mainCategory: main,
+          subCategories: Array.from(subs),
+        }));
+
+        res.json(categories);
+      });
+  } catch (error) {
+    console.error("Error building categories:", error);
+    res.status(500).send("Error loading categories");
+  }
+});
+
+function getMainCategory(sub) {
+  const lower = sub.toLowerCase();
+  if (lower.includes("t-shirt")) return "T-Shirts";
+  if (lower.includes("polo") || lower.includes("knit")) return "Polos/Knits";
+  if (lower.includes("sweatshirt") || lower.includes("fleece")) return "Sweatshirts/Fleece";
+  if (lower.includes("cap") || lower.includes("hat")) return "Caps";
+  if (lower.includes("active")) return "Activewear";
+  if (lower.includes("outerwear")) return "Outerwear";
+  if (lower.includes("woven") || lower.includes("dress")) return "Woven/Dress Shirts";
+  if (lower.includes("bottom")) return "Bottoms";
+  if (lower.includes("work")) return "Workwear";
+  if (lower.includes("bag")) return "Bags";
+  if (lower.includes("accessorie")) return "Accessories";
+  if (lower.includes("protect")) return "Personal Protection";
+  if (lower.includes("women")) return "Women's";
+  if (lower.includes("youth")) return "Youth";
+  return "Other";
+}

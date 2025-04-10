@@ -1,0 +1,37 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px; /* Adjust padding to reduce header size */
+  background-color: var(--background-color);
+  color: var(--text-color);
+  position: relative; /* Ensure relative positioning for absolute elements */
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+}
+
+.logo {
+  height: 150px; /* Adjust logo height to fit within the header */
+}
+
+.contact-info {
+  text-align: right;
+  margin-right: 100px; /* Adjust margin to position the text correctly */
+}
+
+.theme-toggle {
+  padding: 5px 10px; /* Adjust padding for the toggle button */
+  margin-left: 20px;
+  cursor: pointer;
+  background-color: var(--text-color);
+  color: var(--background-color);
+  border: none;
+  border-radius: 5px;
+  font-size: 12px; /* Make the button smaller */
+  position: absolute; /* Position the button at the top */
+  top: 10px;
+  right: 10px;
+}
