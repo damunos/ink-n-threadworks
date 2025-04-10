@@ -22,14 +22,6 @@
     "tailwindcss": "^3.4.1",
     "gh-pages": "^6.0.0"
   },
-  "eslintConfig": {
-    "root": true,
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ],
-    "ignorePatterns": ["node_modules", "build"]
-  },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
@@ -38,7 +30,11 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
-  "proxy": "http://localhost:5000",
+  "eslintConfig": {
+    "root": true,
+    "extends": ["react-app", "react-app/jest"],
+    "ignorePatterns": ["node_modules", "build"]
+  },
   "browserslist": {
     "production": [
       ">0.2%",
@@ -50,5 +46,6 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "proxy": "http://localhost:5000"
 }
